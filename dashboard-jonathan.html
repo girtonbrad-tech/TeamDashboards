@@ -68,9 +68,13 @@ table tbody tr:hover{background:#F9FAFB}
 .timer-btn-pause:hover{background:#e07d1e}
 .project-select{width:100%;padding:8px 10px;border:1px solid #E8E8E8;border-radius:4px;font-size:12px;font-family:inherit;margin-bottom:10px;background:#FFF}
 .project-select:focus{outline:none;border-color:#71AB25}
-.today-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid #E8E8E8}
+.today-stats{display:flex;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid #E8E8E8}
 .stat-box{text-align:center;padding:10px;background:#F0F3F6;border-radius:6px;cursor:pointer;transition:all 0.2s}
 .stat-box:hover{background:#E8E8E8}
+.week-day-box{flex:1;text-align:center;padding:6px 2px;background:#F9F9F9;border-radius:4px;border:1px solid #E8E8E8}
+.week-day-label{font-size:9px;font-weight:600;color:#616161}
+.week-day-date{font-size:9px;color:#8a8886}
+.week-day-hours{font-size:12px;font-weight:600;color:#107c10;margin-top:2px}
 .stat-value{font-size:20px;font-weight:600;color:#12223F}
 .stat-label{font-size:10px;color:#616161;margin-top:2px;text-transform:uppercase;letter-spacing:0.5px}
 .time-entries{margin-top:12px;padding-top:12px;border-top:1px solid #E8E8E8;max-height:150px;overflow-y:auto}
@@ -197,8 +201,13 @@ SECTION_VISIBILITY_CSS_HERE
 <div class="sidebar">
 <div class="sidebar-title">Quick Links</div>
 <div id="quickLinksContainer"></div>
+<div id="teamLinksSection" style="display:none;margin-top:16px">
+<div class="sidebar-title">Team Links</div>
+<div id="teamLinksContainer"></div>
+</div>
 </div>
 <script id="quickLinksData" type="application/json">[{"label":"CE","desc":"Client Experience","url":"https://nextgen.clientexp.bakerhillsolutions.net/appaccessv2","icon":"🎫","color":"#00A1E0"},{"label":"DevOps","desc":"NextGen","url":"https://dev.azure.com/bakerhill/NextGen/_git/NextGen%20implementations","icon":"📂","color":"#0078d4"},{"label":"PM+","desc":"Dashboard","url":"https://bakerhill.lightning.force.com/lightning/r/Dashboard/01Z1R0000015RZtUAM/view","icon":"📊","color":"#71AB25"}]</script>
+<script id="teamLinksData" type="application/json">[{"label":"Services Notebook","url":"https://bakerhill.sharepoint.com/sites/Services/_layouts/15/Doc.aspx?sourcedoc={adb18686-6e4f-43e9-9f01-f42d657b97f0}&action=edit&wd=target%28Change%20Management.one%7Cf874d48f-e0e0-4a6f-9e86-67bbcda2ed1d%2FChange%20Management%7Ce53cdc92-bbed-46ad-b4f8-6ed088454863%2F%29&wdorigin=NavigationUrl","icon":"🏗️","color":"#107c10","desc":"Process Documentation"}]</script>
 
 <!-- Main Content -->
 <div class="content">
@@ -288,23 +297,43 @@ SECTION_VISIBILITY_CSS_HERE
 <button class="timer-btn timer-btn-pause" id="pauseBtn" onclick="pauseTimer()" style="display:none">⏸ Pause</button>
 <button class="timer-btn timer-btn-stop" id="stopBtn" onclick="stopTimer()" style="display:none">⏹ Stop</button>
 </div>
-<div class="today-stats">
-<div class="stat-box" onclick="openHistoryModal()">
-<div class="stat-value" id="todayHours">0m</div>
-<div class="stat-label">Time Today</div>
+<div class="today-stats" style="gap:6px">
+<div class="stat-box" onclick="openHistoryModal()" style="flex:1;min-width:0;padding:8px 4px">
+<div class="stat-value" id="todayHours" style="font-size:16px">0m</div>
+<div class="stat-label" style="font-size:9px">Today</div>
 </div>
-<div class="stat-box" onclick="openHistoryModal()">
-<div class="stat-value" id="todayEntries">0</div>
-<div class="stat-label">Entries</div>
+<div class="stat-box" id="sfTimeTodayBox" style="flex:1;min-width:0;padding:8px 4px;background:#e6f4ea">
+<div class="stat-value" id="sfTimeToday" style="font-size:16px">-</div>
+<div class="stat-label" style="font-size:9px">SF Today</div>
+</div>
+<div class="stat-box" onclick="openHistoryModal()" style="flex:1;min-width:0;padding:8px 4px">
+<div class="stat-value" id="todayEntries" style="font-size:16px">0</div>
+<div class="stat-label" style="font-size:9px">Entries</div>
 </div>
 </div>
 <div class="time-entries" id="timeEntries">
 <div class="empty-entries">No time entries today</div>
 </div>
-
+<button class="add-project-btn" style="margin-top:10px" onclick="openProjectModal()">+ Add Project</button>
 <button class="add-project-btn" style="margin-top:6px;background:#F0F3F6;border-style:solid;border-color:#E8E8E8" onclick="openHistoryModal()">📊 View History</button>
 <button class="add-project-btn" style="margin-top:6px;background:#00A1E0;color:white;border:none" onclick="openSubmitSFModal()">☁️ Submit Today's Time</button>
 <button class="add-project-btn" id="prevTimeBtn" style="margin-top:6px;background:#F78D28;color:white;border:none;display:none" onclick="openPrevTimeModal()">⏰ Previous Time Not Submitted</button>
+
+<!-- Week SF Time Section -->
+<div style="margin-top:12px;padding-top:12px;border-top:1px solid #E8E8E8">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<span style="font-size:11px;font-weight:600;color:#616161">SF Time This Week</span>
+<span style="font-size:13px;font-weight:700;color:#107c10" id="sfWeekTotal">-</span>
+</div>
+<div style="display:flex;gap:4px" id="weekDaysContainer">
+<div class="week-day-box"><div class="week-day-label">Mon</div><div class="week-day-date" id="monDate">-</div><div class="week-day-hours" id="monHours">-</div></div>
+<div class="week-day-box"><div class="week-day-label">Tue</div><div class="week-day-date" id="tueDate">-</div><div class="week-day-hours" id="tueHours">-</div></div>
+<div class="week-day-box"><div class="week-day-label">Wed</div><div class="week-day-date" id="wedDate">-</div><div class="week-day-hours" id="wedHours">-</div></div>
+<div class="week-day-box"><div class="week-day-label">Thu</div><div class="week-day-date" id="thuDate">-</div><div class="week-day-hours" id="thuHours">-</div></div>
+<div class="week-day-box"><div class="week-day-label">Fri</div><div class="week-day-date" id="friDate">-</div><div class="week-day-hours" id="friHours">-</div></div>
+</div>
+</div>
+<script id="sfWeekTimeData" type="application/json">{"totalSize":3,"done":true,"records":[{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hQ4r2AE"},"MPM4_BASE__ActivityDateTime__c":"2025-12-29T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.5},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hQWH2A2"},"MPM4_BASE__ActivityDateTime__c":"2025-12-29T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.25},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hX4j2AE"},"MPM4_BASE__ActivityDateTime__c":"2025-12-29T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.5}]}</script>
 </div>
 </div>
 </div>
@@ -314,6 +343,39 @@ SECTION_VISIBILITY_CSS_HERE
 
 
 
+
+<!-- Add Project Modal -->
+<div class="modal-overlay" id="projectModal">
+<div class="modal">
+<div class="modal-header">
+<h3>Add New Project</h3>
+<button class="modal-close" onclick="closeProjectModal()">&times;</button>
+</div>
+<div class="form-group">
+<label>Project Name</label>
+<input type="text" id="projectName" placeholder="Enter project name...">
+</div>
+<div class="form-group">
+<label>Color</label>
+<div class="color-options" id="colorOptions"></div>
+</div>
+<div class="form-group">
+<label>Hourly Rate (optional)</label>
+<input type="number" id="projectRate" placeholder="0.00" step="0.01">
+</div>
+<div class="form-group" style="border-top:1px solid #E8E8E8;padding-top:14px;margin-top:14px">
+<label>🔗 Link to Salesforce Project (optional)</label>
+<select id="sfProjectSelect" class="project-select">
+<option value="">-- No SF Link --</option>
+</select>
+<p style="font-size:11px;color:#616161;margin-top:6px">Link to submit time entries directly to Salesforce</p>
+</div>
+<div class="modal-actions">
+<button class="btn-cancel" onclick="closeProjectModal()">Cancel</button>
+<button class="btn-save" onclick="saveProject()">Save Project</button>
+</div>
+</div>
+</div>
 
 <!-- History Modal -->
 <div class="modal-overlay" id="historyModal">
@@ -500,6 +562,43 @@ function loadQuickLinks() {
     }
 }
 loadQuickLinks();
+
+function loadTeamLinks() {
+    const container = document.getElementById('teamLinksContainer');
+    const section = document.getElementById('teamLinksSection');
+    if (!container || !section) return;
+    
+    try {
+        const dataElement = document.getElementById('teamLinksData');
+        const jsonText = dataElement ? dataElement.textContent.trim() : '';
+        
+        if (!jsonText || jsonText.length < 10 || jsonText === 'TEAM_LINKS_DATA' + '_HERE' || jsonText === 'null') {
+            section.style.display = 'none';
+            return;
+        }
+        
+        const links = JSON.parse(jsonText);
+        if (!Array.isArray(links) || links.length === 0) {
+            section.style.display = 'none';
+            return;
+        }
+        
+        section.style.display = 'block';
+        container.innerHTML = links.map(link => `
+            <a href="${link.url}" target="_blank" class="quick-link">
+                <div class="quick-link-icon" style="background:${link.color || '#007299'}">${link.icon || '🔗'}</div>
+                <div class="quick-link-text">
+                    <div class="quick-link-label">${link.label}</div>
+                    <div class="quick-link-desc">${link.desc || ''}</div>
+                </div>
+            </a>
+        `).join('');
+    } catch (e) {
+        console.log('Could not load team links:', e);
+        section.style.display = 'none';
+    }
+}
+loadTeamLinks();
 
 // =====================
 // MULTI-DAY CALENDAR
@@ -734,6 +833,7 @@ const STORAGE_KEY = 'timeTrackerDashboard_' + USER_RESOURCE_ID;
 const INTERNAL_ADMIN_PLAN_ID = 'a0l1R00000W9iJeQAJ';
 
 let sfTasks = []; // Brad's tasks via Task Resource - for submitting time
+let allSFProjects = []; // Filtered list for SF project dropdown
 let projectTasksCache = {}; // Cache for all tasks per project (loaded on demand)
 
 function getLocalDateString(date) {
@@ -1031,6 +1131,111 @@ function selectColor(color) {
     renderColorOptions();
 }
 
+function openProjectModal() {
+    document.getElementById('projectModal').classList.add('active');
+    document.getElementById('projectName').value = '';
+    document.getElementById('projectRate').value = '';
+    selectedColor = projectColors[0];
+    renderColorOptions();
+    
+    // Load all active projects from allProjectsData
+    const sfProjectSelect = document.getElementById('sfProjectSelect');
+    let projectList = [];
+    
+    try {
+        const projectsElement = document.getElementById('allProjectsData');
+        const projectsText = projectsElement ? projectsElement.textContent.trim() : '';
+        if (projectsText && projectsText.length > 20) {
+            const projectsRaw = JSON.parse(projectsText);
+            const projects = Array.isArray(projectsRaw) ? projectsRaw : (projectsRaw.value || projectsRaw.records || []);
+            projects.forEach(p => {
+                if (p.Id && p.Name) {
+                    const clientName = p.MPM4_BASE__Account__r?.Name || '';
+                    const displayName = clientName ? `${clientName} - ${p.Name}` : p.Name;
+                    const hasTasks = sfTasks.some(t => t.projectId === p.Id);
+                    projectList.push({ id: p.Id, name: displayName, hasTasks: hasTasks });
+                }
+            });
+        }
+    } catch (e) { console.log('Could not load projects:', e); }
+    
+    // Sort: projects with tasks first, then alphabetically
+    projectList.sort((a, b) => {
+        if (a.hasTasks !== b.hasTasks) return b.hasTasks - a.hasTasks;
+        return a.name.localeCompare(b.name);
+    });
+    
+    // Filter out Internal Admin Plan
+    projectList = projectList.filter(p => p.id !== INTERNAL_ADMIN_PLAN_ID);
+    
+    allSFProjects = projectList;
+    
+    sfProjectSelect.innerHTML = '<option value="">-- No SF Link --</option>' +
+        projectList.map(p => {
+            if (p.hasTasks) {
+                return `<option value="${p.id}">${p.name}</option>`;
+            } else {
+                return `<option value="${p.id}" style="color:#999">${p.name} (no tasks)</option>`;
+            }
+        }).join('');
+    
+    const projectNameInput = document.getElementById('projectName');
+    projectNameInput.removeEventListener('input', filterSFProjects);
+    projectNameInput.addEventListener('input', filterSFProjects);
+}
+
+function closeProjectModal() {
+    document.getElementById('projectModal').classList.remove('active');
+}
+
+function filterSFProjects() {
+    const filterText = document.getElementById('projectName').value.trim().toLowerCase();
+    const sfProjectSelect = document.getElementById('sfProjectSelect');
+    
+    const buildOptions = (projects) => projects.map(p => {
+        if (p.hasTasks) {
+            return `<option value="${p.id}">${p.name}</option>`;
+        } else {
+            return `<option value="${p.id}" style="color:#999">${p.name} (no tasks)</option>`;
+        }
+    }).join('');
+    
+    if (!filterText) {
+        sfProjectSelect.innerHTML = '<option value="">-- No SF Link --</option>' + buildOptions(allSFProjects);
+        return;
+    }
+    
+    const filteredProjects = allSFProjects.filter(p => 
+        p.name.toLowerCase().includes(filterText)
+    );
+    
+    sfProjectSelect.innerHTML = '<option value="">-- No SF Link --</option>' + buildOptions(filteredProjects);
+}
+
+function saveProject() {
+    const name = document.getElementById('projectName').value.trim();
+    if (!name) return alert('Please enter a project name');
+    const sfProjectSelect = document.getElementById('sfProjectSelect');
+    const sfProjectId = sfProjectSelect.value || null;
+    let sfProjectName = sfProjectId ? sfProjectSelect.options[sfProjectSelect.selectedIndex].text : null;
+    if (sfProjectName) {
+        sfProjectName = sfProjectName.replace(' (no tasks)', '');
+    }
+    const newProject = {
+        id: Date.now(),
+        name: name,
+        color: selectedColor,
+        rate: parseFloat(document.getElementById('projectRate').value) || 0,
+        permanent: false,
+        sfProjectId: sfProjectId,
+        sfProjectName: sfProjectName
+    };
+    timeData.projects.push(newProject);
+    saveTimeData();
+    renderProjects();
+    closeProjectModal();
+}
+
 function startTimer() {
     const projectId = document.getElementById('projectSelect').value;
     if (!projectId) return alert('Please select a project first');
@@ -1214,6 +1419,81 @@ function updateTodayStats() {
     document.getElementById('todayHours').textContent = displayTime;
     document.getElementById('todayEntries').textContent = todayEntries.length;
 }
+
+// Load SF time data for the week
+function loadSFWeekTime() {
+    try {
+        const dataElement = document.getElementById('sfWeekTimeData');
+        const jsonText = dataElement ? dataElement.textContent.trim() : '';
+        
+        if (!jsonText || jsonText.length < 10 || jsonText === 'SF_WEEK_TIME_DATA' + '_HERE') {
+            return;
+        }
+        
+        const rawData = JSON.parse(jsonText);
+        const records = Array.isArray(rawData) ? rawData : (rawData.value || rawData.records || []);
+        
+        // Get current week dates (Mon-Fri)
+        const now = new Date();
+        const dayOfWeek = now.getDay();
+        const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+        const monday = new Date(now);
+        monday.setDate(now.getDate() + mondayOffset);
+        monday.setHours(0, 0, 0, 0);
+        
+        const weekDays = ['mon', 'tue', 'wed', 'thu', 'fri'];
+        const weekDates = {};
+        let weekTotal = 0;
+        
+        // Initialize dates and zero hours
+        for (let i = 0; i < 5; i++) {
+            const d = new Date(monday);
+            d.setDate(monday.getDate() + i);
+            const dateStr = d.toISOString().split('T')[0];
+            const displayDate = (d.getMonth() + 1) + '/' + d.getDate();
+            weekDates[dateStr] = { day: weekDays[i], display: displayDate, hours: 0 };
+            document.getElementById(weekDays[i] + 'Date').textContent = displayDate;
+        }
+        
+        // Sum hours by date from SF data
+        records.forEach(r => {
+            const entryDate = r.MPM4_BASE__Date__c;
+            if (weekDates[entryDate]) {
+                const hours = parseFloat(r.MPM4_BASE__Hours__c) || 0;
+                weekDates[entryDate].hours += hours;
+                weekTotal += hours;
+            }
+        });
+        
+        // Update display
+        const today = getLocalDateString();
+        Object.entries(weekDates).forEach(([dateStr, data]) => {
+            const hoursEl = document.getElementById(data.day + 'Hours');
+            const boxEl = hoursEl?.closest('.week-day-box');
+            if (hoursEl) {
+                hoursEl.textContent = data.hours > 0 ? data.hours.toFixed(2) : '-';
+                // Highlight today
+                if (dateStr === today && boxEl) {
+                    boxEl.style.background = '#e6f4ea';
+                    boxEl.style.borderColor = '#107c10';
+                }
+            }
+        });
+        
+        // Update SF Today from the actual data
+        const todayData = weekDates[today];
+        if (todayData) {
+            document.getElementById('sfTimeToday').textContent = todayData.hours > 0 ? todayData.hours.toFixed(2) + 'h' : '-';
+        }
+        
+        // Update week total
+        document.getElementById('sfWeekTotal').textContent = weekTotal > 0 ? weekTotal.toFixed(2) + 'h' : '-';
+        
+    } catch (e) {
+        console.log('Could not load SF week time:', e);
+    }
+}
+loadSFWeekTime();
 
 // =====================
 // HISTORY MODAL
