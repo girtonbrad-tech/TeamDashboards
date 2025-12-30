@@ -1457,9 +1457,11 @@ function loadSFWeekTime() {
         
         // Sum hours by date from SF data
         records.forEach(r => {
-            const entryDate = r.MPM4_BASE__Date__c;
+            const dateTime = r.MPM4_BASE__ActivityDateTime__c;
+            if (!dateTime) return;
+            const entryDate = dateTime.split('T')[0]; // Extract date part from datetime
             if (weekDates[entryDate]) {
-                const hours = parseFloat(r.MPM4_BASE__Hours__c) || 0;
+                const hours = parseFloat(r.MPM4_BASE__Hours_Input__c) || 0;
                 weekDates[entryDate].hours += hours;
                 weekTotal += hours;
             }
