@@ -3,9 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <title>Work Dashboard | Baker Hill</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -200,11 +197,8 @@ SECTION_VISIBILITY_CSS_HERE
 <div class="sidebar">
 <div class="sidebar-title">Quick Links</div>
 <div id="quickLinksContainer"></div>
-<div class="sidebar-title" style="margin-top:16px">Team Resources</div>
-<div id="teamLinksContainer"></div>
 </div>
 <script id="quickLinksData" type="application/json">[{"label":"CE","desc":"Client Experience","url":"https://nextgen.clientexp.bakerhillsolutions.net/appaccessv2","icon":"🎫","color":"#00A1E0"},{"label":"DevOps","desc":"NextGen","url":"https://dev.azure.com/bakerhill/NextGen/_git/NextGen%20implementations","icon":"📂","color":"#0078d4"},{"label":"PM+","desc":"Dashboard","url":"https://bakerhill.lightning.force.com/lightning/r/Dashboard/01Z1R0000015RZtUAM/view","icon":"📊","color":"#71AB25"}]</script>
-<script id="teamLinksData" type="application/json">[{"label":"Services Notebook","url":"https://bakerhill.sharepoint.com/sites/Services/_layouts/15/Doc.aspx?sourcedoc={adb18686-6e4f-43e9-9f01-f42d657b97f0}&action=edit&wd=target%28Change%20Management.one%7Cf874d48f-e0e0-4a6f-9e86-67bbcda2ed1d%2FChange%20Management%7Ce53cdc92-bbed-46ad-b4f8-6ed088454863%2F%29&wdorigin=NavigationUrl","icon":"🏗️","color":"#107c10","desc":"Process Documentation"}]</script>
 
 <!-- Main Content -->
 <div class="content">
@@ -307,10 +301,7 @@ SECTION_VISIBILITY_CSS_HERE
 <div class="time-entries" id="timeEntries">
 <div class="empty-entries">No time entries today</div>
 </div>
-<div style="display:flex;gap:6px;margin-top:10px">
-<button class="add-project-btn" style="flex:1" onclick="openProjectModal()">+ Add Project</button>
-<button class="add-project-btn" style="flex:1" onclick="openRemoveProjectModal()">− Remove Project</button>
-</div>
+
 <button class="add-project-btn" style="margin-top:6px;background:#F0F3F6;border-style:solid;border-color:#E8E8E8" onclick="openHistoryModal()">📊 View History</button>
 <button class="add-project-btn" style="margin-top:6px;background:#00A1E0;color:white;border:none" onclick="openSubmitSFModal()">☁️ Submit Today's Time</button>
 <button class="add-project-btn" id="prevTimeBtn" style="margin-top:6px;background:#F78D28;color:white;border:none;display:none" onclick="openPrevTimeModal()">⏰ Previous Time Not Submitted</button>
@@ -320,80 +311,9 @@ SECTION_VISIBILITY_CSS_HERE
 </div>
 </div>
 
-<!-- Add Project Modal -->
-<div class="modal-overlay" id="projectModal">
-<div class="modal">
-<div class="modal-header">
-<h3>Add New Project</h3>
-<button class="modal-close" onclick="closeProjectModal()">&times;</button>
-</div>
-<div class="form-group">
-<label>Project Name</label>
-<input type="text" id="projectName" placeholder="Enter project name...">
-</div>
-<div class="form-group">
-<label>Color</label>
-<div class="color-options" id="colorOptions"></div>
-</div>
-<div class="form-group">
-<label>Hourly Rate (optional)</label>
-<input type="number" id="projectRate" placeholder="0.00" step="0.01">
-</div>
-<div class="form-group" style="border-top:1px solid #E8E8E8;padding-top:14px;margin-top:14px">
-<label>🔗 Link to Salesforce Project (optional)</label>
-<select id="sfProjectSelect" class="project-select">
-<option value="">-- No SF Link --</option>
-</select>
-<p style="font-size:11px;color:#616161;margin-top:6px">Link to submit time entries directly to Salesforce</p>
-</div>
-<div class="modal-actions">
-<button class="btn-cancel" onclick="closeProjectModal()">Cancel</button>
-<button class="btn-save" onclick="saveProject()">Save Project</button>
-</div>
-</div>
-</div>
 
-<!-- Start Timer Description Modal -->
-<div class="modal-overlay" id="startTimerModal">
-<div class="modal">
-<div class="modal-header">
-<h3>Start Timer</h3>
-<button class="modal-close" onclick="closeStartTimerModal()">&times;</button>
-</div>
-<div style="margin-bottom:14px">
-<div id="startTimerProjectName" style="font-weight:600;color:#12223F;font-size:14px"></div>
-</div>
-<div class="form-group">
-<label>What are you working on? (optional)</label>
-<input type="text" id="startTimerDescription" placeholder="Enter description..." style="width:100%">
-</div>
-<div class="modal-actions">
-<button class="btn-cancel" onclick="closeStartTimerModal()">Cancel</button>
-<button class="btn-save" onclick="confirmStartTimer()">▶ Start Timer</button>
-</div>
-</div>
-</div>
 
-<!-- Remove Project Modal -->
-<div class="modal-overlay" id="removeProjectModal">
-<div class="modal">
-<div class="modal-header">
-<h3>Remove Project</h3>
-<button class="modal-close" onclick="closeRemoveProjectModal()">&times;</button>
-</div>
-<div class="form-group">
-<label>Select Project to Remove</label>
-<select id="removeProjectSelect" class="project-select">
-<option value="">Select a project...</option>
-</select>
-<p style="font-size:11px;color:#616161;margin-top:6px">Note: Admin tasks cannot be removed.</p>
-</div>
-<div class="modal-actions">
-<button class="btn-cancel" onclick="closeRemoveProjectModal()">Cancel</button>
-<button class="btn-save" style="background:#d13438" onclick="removeProject()">Remove Project</button>
-</div>
-</div>
-</div>
+
 
 <!-- History Modal -->
 <div class="modal-overlay" id="historyModal">
@@ -580,45 +500,6 @@ function loadQuickLinks() {
     }
 }
 loadQuickLinks();
-
-// =====================
-// TEAM LINKS
-// =====================
-function loadTeamLinks() {
-    const container = document.getElementById('teamLinksContainer');
-    if (!container) return;
-    
-    try {
-        const dataElement = document.getElementById('teamLinksData');
-        const jsonText = dataElement ? dataElement.textContent.trim() : '';
-        
-        if (!jsonText || jsonText.length < 10 || jsonText === 'TEAM_LINKS_DATA' + '_HERE') {
-            // No team links configured
-            container.innerHTML = '<div style="color:rgba(255,255,255,0.5);font-size:11px;padding:10px">No team links configured</div>';
-            return;
-        }
-        
-        const links = JSON.parse(jsonText);
-        if (!Array.isArray(links) || links.length === 0) {
-            container.innerHTML = '<div style="color:rgba(255,255,255,0.5);font-size:11px;padding:10px">No team links configured</div>';
-            return;
-        }
-        
-        // Render team links from config
-        container.innerHTML = links.map(link => `
-            <a href="${link.url}" target="_blank" class="quick-link">
-                <div class="quick-link-icon" style="background:${link.color || '#007299'}">${link.icon || '🔗'}</div>
-                <div class="quick-link-text">
-                    <div class="quick-link-label">${link.label}</div>
-                    <div class="quick-link-desc">${link.desc || ''}</div>
-                </div>
-            </a>
-        `).join('');
-    } catch (e) {
-        console.log('Could not load team links:', e);
-    }
-}
-loadTeamLinks();
 
 // =====================
 // MULTI-DAY CALENDAR
@@ -811,8 +692,7 @@ function renderCalendarForDate(dateKey) {
             }
         }
         
-        const hasSubmitted = (function() { try { return isCalendarEventSubmitted(subject, dateKey); } catch(e) { return false; } })();
-        html += `<tr style="cursor:pointer" data-duration="${durationHours}"><td>${timeDisplay}</td><td>${subject}${hasSubmitted ? ' <span style="color:#71AB25" title="Time submitted">☁️</span>' : ''}</td></tr>`;
+        html += `<tr style="cursor:pointer" data-duration="${durationHours}"><td>${timeDisplay}</td><td>${subject}</td></tr>`;
     });
     
     html += '</tbody></table>';
@@ -850,12 +730,10 @@ const USER_RESOURCE_ID = 'a0m1R00000NM1uaQAD';
 // User-specific localStorage key to prevent collisions between dashboards
 const STORAGE_KEY = 'timeTrackerDashboard_' + USER_RESOURCE_ID;
 
-// Internal Admin Plan - exclude from Add Project dropdown (admin tasks use pre-linked defaults)
+// Internal Admin Plan ID
 const INTERNAL_ADMIN_PLAN_ID = 'a0l1R00000W9iJeQAJ';
 
 let sfTasks = []; // Brad's tasks via Task Resource - for submitting time
-let allProjects = []; // All active projects - for Add Project dropdown
-let allSFProjects = []; // Filtered list for dropdown display
 let projectTasksCache = {}; // Cache for all tasks per project (loaded on demand)
 
 function getLocalDateString(date) {
@@ -1077,24 +955,6 @@ function trackSubmission(taskId, taskName, date, hours, source) {
     saveTimeData();
 }
 
-function trackCalendarEventSubmission(eventName, date) {
-    if (!timeData.calendarSubmissions) {
-        timeData.calendarSubmissions = [];
-    }
-    // Store unique key for this calendar event
-    const key = `${eventName}|${date}`;
-    if (!timeData.calendarSubmissions.includes(key)) {
-        timeData.calendarSubmissions.push(key);
-        saveTimeData();
-    }
-}
-
-function isCalendarEventSubmitted(eventName, date) {
-    if (typeof timeData === 'undefined' || !timeData || !timeData.calendarSubmissions) return false;
-    const key = `${eventName}|${date}`;
-    return timeData.calendarSubmissions.includes(key);
-}
-
 function checkForExistingSubmissions(taskId, date) {
     return timeData.submissionHistory.filter(s => 
         s.taskId === taskId && s.date === date
@@ -1171,167 +1031,11 @@ function selectColor(color) {
     renderColorOptions();
 }
 
-function openProjectModal() {
-    document.getElementById('projectModal').classList.add('active');
-    document.getElementById('projectName').value = '';
-    document.getElementById('projectRate').value = '';
-    selectedColor = projectColors[0];
-    renderColorOptions();
-    
-    // Load all active projects from allProjectsData
-    const sfProjectSelect = document.getElementById('sfProjectSelect');
-    let projectList = [];
-    
-    try {
-        const projectsElement = document.getElementById('allProjectsData');
-        const projectsText = projectsElement ? projectsElement.textContent.trim() : '';
-        if (projectsText && projectsText.length > 20) {
-            const projectsRaw = JSON.parse(projectsText);
-            const projects = Array.isArray(projectsRaw) ? projectsRaw : (projectsRaw.value || projectsRaw.records || []);
-            projects.forEach(p => {
-                if (p.Id && p.Name) {
-                    // Account name comes from relationship field
-                    const clientName = p.MPM4_BASE__Account__r?.Name || '';
-                    const displayName = clientName ? `${clientName} - ${p.Name}` : p.Name;
-                    const hasTasks = sfTasks.some(t => t.projectId === p.Id);
-                    projectList.push({ id: p.Id, name: displayName, hasTasks: hasTasks });
-                }
-            });
-        }
-    } catch (e) { console.log('Could not load projects:', e); }
-    
-    // Sort: projects with tasks first, then alphabetically
-    projectList.sort((a, b) => {
-        if (a.hasTasks !== b.hasTasks) return b.hasTasks - a.hasTasks;
-        return a.name.localeCompare(b.name);
-    });
-    
-    // Filter out Internal Admin Plan - admin tasks use pre-linked default projects
-    projectList = projectList.filter(p => p.id !== INTERNAL_ADMIN_PLAN_ID);
-    
-    // Store full list for filtering
-    allSFProjects = projectList;
-    
-    sfProjectSelect.innerHTML = '<option value="">-- No SF Link --</option>' +
-        projectList.map(p => {
-            if (p.hasTasks) {
-                return `<option value="${p.id}">${p.name}</option>`;
-            } else {
-                return `<option value="${p.id}" style="color:#999">${p.name} (no tasks)</option>`;
-            }
-        }).join('');
-    
-    // Add event listener for filtering SF projects based on project name input
-    const projectNameInput = document.getElementById('projectName');
-    projectNameInput.removeEventListener('input', filterSFProjects); // Remove any existing listener
-    projectNameInput.addEventListener('input', filterSFProjects);
-}
-
-function closeProjectModal() {
-    document.getElementById('projectModal').classList.remove('active');
-}
-
-function filterSFProjects() {
-    const filterText = document.getElementById('projectName').value.trim().toLowerCase();
-    const sfProjectSelect = document.getElementById('sfProjectSelect');
-    
-    const buildOptions = (projects) => projects.map(p => {
-        if (p.hasTasks) {
-            return `<option value="${p.id}">${p.name}</option>`;
-        } else {
-            return `<option value="${p.id}" style="color:#999">${p.name} (no tasks)</option>`;
-        }
-    }).join('');
-    
-    // If no filter text, show all projects
-    if (!filterText) {
-        sfProjectSelect.innerHTML = '<option value="">-- No SF Link --</option>' + buildOptions(allSFProjects);
-        return;
-    }
-    
-    // Filter projects that contain the filter text (case-insensitive)
-    const filteredProjects = allSFProjects.filter(p => 
-        p.name.toLowerCase().includes(filterText)
-    );
-    
-    sfProjectSelect.innerHTML = '<option value="">-- No SF Link --</option>' + buildOptions(filteredProjects);
-}
-
-function openRemoveProjectModal() {
-    const select = document.getElementById('removeProjectSelect');
-    const removableProjects = timeData.projects.filter(p => !p.permanent);
-    if (removableProjects.length === 0) {
-        alert('No client projects to remove. Admin tasks cannot be removed.');
-        return;
-    }
-    select.innerHTML = '<option value="">Select a project...</option>' + 
-        removableProjects.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
-    document.getElementById('removeProjectModal').classList.add('active');
-}
-
-function closeRemoveProjectModal() {
-    document.getElementById('removeProjectModal').classList.remove('active');
-}
-
-function removeProject() {
-    const projectId = document.getElementById('removeProjectSelect').value;
-    if (!projectId) return alert('Please select a project to remove');
-    const project = timeData.projects.find(p => p.id == projectId);
-    if (project.permanent) return alert('Admin tasks cannot be removed');
-    if (!confirm(`Are you sure you want to remove "${project.name}"?`)) return;
-    timeData.projects = timeData.projects.filter(p => p.id != projectId);
-    saveTimeData();
-    renderProjects();
-    closeRemoveProjectModal();
-}
-
-function saveProject() {
-    const name = document.getElementById('projectName').value.trim();
-    if (!name) return alert('Please enter a project name');
-    const sfProjectSelect = document.getElementById('sfProjectSelect');
-    const sfProjectId = sfProjectSelect.value || null;
-    let sfProjectName = sfProjectId ? sfProjectSelect.options[sfProjectSelect.selectedIndex].text : null;
-    // Remove "(no tasks)" suffix if present
-    if (sfProjectName) {
-        sfProjectName = sfProjectName.replace(' (no tasks)', '');
-    }
-    const newProject = {
-        id: Date.now(),
-        name: name,
-        color: selectedColor,
-        rate: parseFloat(document.getElementById('projectRate').value) || 0,
-        permanent: false,
-        sfProjectId: sfProjectId,
-        sfProjectName: sfProjectName
-    };
-    timeData.projects.push(newProject);
-    saveTimeData();
-    renderProjects();
-    closeProjectModal();
-}
-
 function startTimer() {
     const projectId = document.getElementById('projectSelect').value;
     if (!projectId) return alert('Please select a project first');
     const project = timeData.projects.find(p => p.id == projectId);
-    
-    // Show the description modal
-    document.getElementById('startTimerProjectName').textContent = project.name;
-    document.getElementById('startTimerDescription').value = '';
-    document.getElementById('startTimerModal').classList.add('active');
-    document.getElementById('startTimerDescription').focus();
-}
-
-function closeStartTimerModal() {
-    document.getElementById('startTimerModal').classList.remove('active');
-}
-
-function confirmStartTimer() {
-    const projectId = document.getElementById('projectSelect').value;
-    const project = timeData.projects.find(p => p.id == projectId);
-    const description = document.getElementById('startTimerDescription').value.trim();
     const now = new Date().toISOString();
-    
     timeData.activeTimer = {
         projectId: parseInt(projectId),
         projectName: project.name,
@@ -1339,8 +1043,7 @@ function confirmStartTimer() {
         originalStartTime: now,
         startTime: now,
         elapsed: 0,
-        paused: false,
-        description: description
+        paused: false
     };
     saveTimeData();
     lastTimerSave = 0;
@@ -1350,7 +1053,6 @@ function confirmStartTimer() {
     document.getElementById('pauseBtn').style.display = 'inline-block';
     document.getElementById('stopBtn').style.display = 'inline-block';
     document.getElementById('projectSelect').disabled = true;
-    closeStartTimerModal();
 }
 
 function pauseTimer() {
@@ -1392,8 +1094,7 @@ function stopTimer() {
             date: getLocalDateString(now),
             startTime: timeData.activeTimer.originalStartTime || timeData.activeTimer.startTime,
             endTime: now.toISOString(),
-            duration: totalSeconds,
-            description: timeData.activeTimer.description || ''
+            duration: totalSeconds
         };
         timeData.entries.push(entry);
     }
@@ -1473,7 +1174,7 @@ function renderTodayEntries() {
             <div class="time-entry-color" style="background:${e.projectColor}"></div>
             <div class="time-entry-info">
                 <div class="time-entry-project">${e.projectName}${e.submittedToSF ? ' <span style="color:#71AB25;font-size:10px">✓ Submitted</span>' : ''}</div>
-                <div class="time-entry-time">${formatTime(e.startTime)} - ${formatTime(e.endTime)}${e.description ? ` · ${e.description}` : ''}</div>
+                <div class="time-entry-time">${formatTime(e.startTime)} - ${formatTime(e.endTime)}</div>
             </div>
             <div class="time-entry-duration">${formatDuration(e.duration)}</div>
             ${e.submittedToSF 
@@ -1555,98 +1256,46 @@ function renderHistory() {
                   historyWeekOffset === -1 ? 'Last Week' :
                   `${startDate.toLocaleDateString('en-US', {month: 'short', day: 'numeric'})} - ${endDate.toLocaleDateString('en-US', {month: 'short', day: 'numeric'})}`;
     document.getElementById('historyWeekLabel').textContent = label;
-    
     const weekEntries = timeData.entries.filter(e => weekDates.includes(e.date));
-    const weekSubmissions = timeData.submissionHistory ? 
-        timeData.submissionHistory.filter(s => weekDates.includes(s.date)) : [];
-    
-    if (weekEntries.length === 0 && weekSubmissions.length === 0) {
+    if (weekEntries.length === 0) {
         container.innerHTML = '<div class="no-history">No time entries for this week</div>';
         return;
     }
-    
     let html = '';
     let weekTotal = 0;
-    let weekSubmittedTotal = 0;
-    
     weekDates.slice().reverse().forEach(date => {
         const dayEntries = weekEntries.filter(e => e.date === date);
-        const daySubmissions = weekSubmissions.filter(s => s.date === date);
-        
-        if (dayEntries.length === 0 && daySubmissions.length === 0) return;
-        
+        if (dayEntries.length === 0) return;
         const dateObj = new Date(date + 'T12:00:00');
         const dateLabel = dateObj.toLocaleDateString('en-US', {weekday: 'long', month: 'short', day: 'numeric'});
-        
+        const projectTotals = {};
+        dayEntries.forEach(e => {
+            if (!projectTotals[e.projectName]) {
+                projectTotals[e.projectName] = {color: e.projectColor, seconds: 0};
+            }
+            projectTotals[e.projectName].seconds += e.duration;
+        });
+        const dayTotal = Object.values(projectTotals).reduce((sum, p) => sum + p.seconds, 0);
+        weekTotal += dayTotal;
         html += `<div class="history-date-group"><div class="history-date-header">${dateLabel}</div>`;
-        
-        // Show tracked time (from timer)
-        if (dayEntries.length > 0) {
-            const projectTotals = {};
-            dayEntries.forEach(e => {
-                if (!projectTotals[e.projectName]) {
-                    projectTotals[e.projectName] = {color: e.projectColor, seconds: 0};
-                }
-                projectTotals[e.projectName].seconds += e.duration;
-            });
-            const dayTotal = Object.values(projectTotals).reduce((sum, p) => sum + p.seconds, 0);
-            weekTotal += dayTotal;
-            
-            html += `<div style="font-size:11px;color:#666;margin:8px 0 4px 0;font-weight:600">⏱️ Tracked</div>`;
-            Object.entries(projectTotals).forEach(([name, data]) => {
-                const timeDisplay = data.seconds < 3600 ? formatHours(data.seconds) : formatHours(data.seconds) + ' hrs';
-                html += `<div class="history-project">
-                    <div class="history-project-color" style="background:${data.color}"></div>
-                    <div class="history-project-name">${name}</div>
-                    <div class="history-project-hours">${timeDisplay}</div>
-                </div>`;
-            });
-        }
-        
-        // Show submitted time (from calendar and tracker)
-        if (daySubmissions.length > 0) {
-            const submissionTotals = {};
-            daySubmissions.forEach(s => {
-                const key = s.taskName || 'Unknown Task';
-                if (!submissionTotals[key]) {
-                    submissionTotals[key] = {hours: 0, sources: new Set()};
-                }
-                submissionTotals[key].hours += s.hours;
-                submissionTotals[key].sources.add(s.source);
-            });
-            const daySubmittedTotal = Object.values(submissionTotals).reduce((sum, s) => sum + s.hours, 0);
-            weekSubmittedTotal += daySubmittedTotal;
-            
-            html += `<div style="font-size:11px;color:#666;margin:8px 0 4px 0;font-weight:600">☁️ Submitted to Salesforce</div>`;
-            Object.entries(submissionTotals).forEach(([name, data]) => {
-                const sourceIcon = data.sources.has('calendar') ? '📅' : '⏱️';
-                html += `<div class="history-project">
-                    <div class="history-project-color" style="background:#71AB25"></div>
-                    <div class="history-project-name">${sourceIcon} ${name}</div>
-                    <div class="history-project-hours">${data.hours.toFixed(2)} hrs</div>
-                </div>`;
-            });
-        }
-        
-        // Day totals
-        const dayTrackedTotal = dayEntries.reduce((sum, e) => sum + e.duration, 0);
-        const daySubmittedHours = daySubmissions.reduce((sum, s) => sum + s.hours, 0);
-        
-        if (dayTrackedTotal > 0 || daySubmittedHours > 0) {
-            const dayTimeDisplay = dayTrackedTotal < 3600 ? formatHours(dayTrackedTotal) : formatHours(dayTrackedTotal) + ' hrs';
-            html += `<div class="history-total">
-                <span class="history-total-label">Day Total</span>
-                <span class="history-total-value">${dayTimeDisplay} tracked${daySubmittedHours > 0 ? ` · ${daySubmittedHours.toFixed(2)} hrs submitted` : ''}</span>
+        Object.entries(projectTotals).forEach(([name, data]) => {
+            const timeDisplay = data.seconds < 3600 ? formatHours(data.seconds) : formatHours(data.seconds) + ' hrs';
+            html += `<div class="history-project">
+                <div class="history-project-color" style="background:${data.color}"></div>
+                <div class="history-project-name">${name}</div>
+                <div class="history-project-hours">${timeDisplay}</div>
             </div>`;
-        }
-        
-        html += `</div>`;
+        });
+        const dayTimeDisplay = dayTotal < 3600 ? formatHours(dayTotal) : formatHours(dayTotal) + ' hrs';
+        html += `<div class="history-total">
+            <span class="history-total-label">Day Total</span>
+            <span class="history-total-value">${dayTimeDisplay}</span>
+        </div></div>`;
     });
-    
     const weekTimeDisplay = weekTotal < 3600 ? formatHours(weekTotal) : formatHours(weekTotal) + ' hrs';
     html += `<div class="history-total" style="background:#71AB25;margin-top:20px">
         <span class="history-total-label">Week Total</span>
-        <span class="history-total-value">${weekTimeDisplay} tracked${weekSubmittedTotal > 0 ? ` · ${weekSubmittedTotal.toFixed(2)} hrs submitted` : ''}</span>
+        <span class="history-total-value">${weekTimeDisplay}</span>
     </div>`;
     container.innerHTML = html;
 }
@@ -2473,9 +2122,6 @@ function hasMeetingStarted(timeStr) {
     return now >= meetingDate;
 }
 
-let currentCalendarEventName = '';
-let currentCalendarEventDate = '';
-
 function openCalendarLogModal(meetingName, meetingTime, dateStr, duration) {
     document.getElementById('calendarLogModal').classList.add('active');
     document.getElementById('calendarMeetingName').value = meetingName;
@@ -2484,10 +2130,6 @@ function openCalendarLogModal(meetingName, meetingTime, dateStr, duration) {
     document.getElementById('calendarHours').value = duration || '';
     document.getElementById('calendarProjectFilter').value = '';
     document.getElementById('calendarTaskSelect').innerHTML = '<option value="">-- Select Project First --</option>';
-    
-    // Store current event for tracking
-    currentCalendarEventName = meetingName;
-    currentCalendarEventDate = dateStr || getLocalDateString();
     
     // Load projects into dropdown
     loadCalendarProjects();
@@ -2759,9 +2401,6 @@ async function submitCalendarTime() {
             // Track this submission
             trackSubmission(taskId, taskName, date, roundedHours, 'calendar');
             
-            // Track calendar event submission for cloud icon
-            trackCalendarEventSubmission(currentCalendarEventName, currentCalendarEventDate);
-            
             // If we added ourselves to the task, add to sfTasks cache
             if (isNotAssigned) {
                 sfTasks.push({ id: taskId, name: taskName.replace(' ⚡', ''), projectId: projectId, notAssigned: false });
@@ -2774,7 +2413,6 @@ async function submitCalendarTime() {
             
             alert('Time submitted successfully!');
             closeCalendarLogModal();
-            updateCalendarDisplay(); // Refresh to show cloud icon
         } else {
             alert('Failed to submit time. Please try again.');
             console.error('SF submit failed:', await response.text());
@@ -2957,15 +2595,8 @@ function renderPrevTimeContent() {
                 const startTime = new Date(e.startTime).toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit', hour12: true});
                 const endTime = new Date(e.endTime).toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit', hour12: true});
                 const mins = Math.round(e.duration / 60);
-                const descPart = e.description ? ` - ${e.description}` : '';
-                return `<div style="font-size:11px;color:#616161;padding:2px 0">└ ${startTime} - ${endTime} (${mins}m)${descPart}</div>`;
+                return `<div style="font-size:11px;color:#616161;padding:2px 0">└ ${startTime} - ${endTime} (${mins}m)</div>`;
             }).join('');
-            
-            // Merge all descriptions from entries for this project
-            const mergedDescriptions = g.entries
-                .map(e => e.description)
-                .filter(d => d && d.trim())
-                .join(' | ');
             
             html += `
                 <div class="prev-time-group" style="border:1px solid #E8E8E8;border-radius:8px;padding:14px;margin-bottom:12px;margin-left:16px;transition:all 0.2s" data-project-id="${g.project.id}" data-date="${dateStr}" data-total-hours="${totalHours}" data-is-linked="${isLinked}">
@@ -3029,7 +2660,7 @@ function renderPrevTimeContent() {
                         
                         <div>
                             <label style="font-size:12px;color:#616161;display:block;margin-bottom:4px">Description (optional):</label>
-                            <input type="text" class="prev-description" data-project-id="${g.project.id}" data-date="${dateStr}" value="${mergedDescriptions}" placeholder="Enter description..." style="width:100%;padding:8px;border:1px solid #E8E8E8;border-radius:4px">
+                            <input type="text" class="prev-description" data-project-id="${g.project.id}" data-date="${dateStr}" placeholder="Enter description..." style="width:100%;padding:8px;border:1px solid #E8E8E8;border-radius:4px">
                         </div>
                     </div>
                     
@@ -3384,20 +3015,13 @@ function renderSubmitSFContent() {
         const tasksForProject = isLinked ? sfTasks.filter(t => t.projectId === g.project.sfProjectId) : [];
         const tasksOptions = tasksForProject.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
         
-        // Format time entries display (now includes descriptions)
+        // Format time entries display
         const entriesDisplay = g.entries.map(e => {
             const startTime = new Date(e.startTime).toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit', hour12: true});
             const endTime = new Date(e.endTime).toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit', hour12: true});
             const mins = Math.round(e.duration / 60);
-            const descPart = e.description ? ` - ${e.description}` : '';
-            return `<div style="font-size:11px;color:#616161;padding:2px 0">└ ${startTime} - ${endTime} (${mins}m)${descPart}</div>`;
+            return `<div style="font-size:11px;color:#616161;padding:2px 0">└ ${startTime} - ${endTime} (${mins}m)</div>`;
         }).join('');
-        
-        // Merge all descriptions from entries for this project
-        const mergedDescriptions = g.entries
-            .map(e => e.description)
-            .filter(d => d && d.trim())
-            .join(' | ');
         
         // Due date warning for admin tasks
         let dueDateWarning = '';
@@ -3482,7 +3106,7 @@ function renderSubmitSFContent() {
                     
                     <div>
                         <label style="font-size:12px;color:#616161;display:block;margin-bottom:4px">Description (optional):</label>
-                        <input type="text" class="sf-description" data-project-id="${g.project.id}" value="${mergedDescriptions}" placeholder="Enter description..." style="width:100%;padding:8px;border:1px solid #E8E8E8;border-radius:4px">
+                        <input type="text" class="sf-description" data-project-id="${g.project.id}" placeholder="Enter description..." style="width:100%;padding:8px;border:1px solid #E8E8E8;border-radius:4px">
                     </div>
                 </div>
                 
