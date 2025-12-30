@@ -71,10 +71,19 @@ table tbody tr:hover{background:#F9FAFB}
 .today-stats{display:flex;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid #E8E8E8}
 .stat-box{text-align:center;padding:10px;background:#F0F3F6;border-radius:6px;cursor:pointer;transition:all 0.2s}
 .stat-box:hover{background:#E8E8E8}
-.week-day-box{flex:1;text-align:center;padding:6px 2px;background:#F9F9F9;border-radius:4px;border:1px solid #E8E8E8}
+.week-day-box{flex:1;text-align:center;padding:6px 2px;background:#F9F9F9;border-radius:4px;border:1px solid #E8E8E8;cursor:pointer;transition:all 0.2s}
+.week-day-box:hover{background:#f0f0f0;border-color:#c8c6c4}
+.week-day-box.selected{background:#e6f4ea;border-color:#107c10;box-shadow:0 0 0 2px rgba(16,124,16,0.2)}
 .week-day-label{font-size:9px;font-weight:600;color:#616161}
 .week-day-date{font-size:9px;color:#8a8886}
 .week-day-hours{font-size:12px;font-weight:600;color:#107c10;margin-top:2px}
+.sf-week-details{margin-top:8px;padding:8px;background:#f9f9f9;border-radius:4px;border:1px solid #E8E8E8;display:none;max-height:150px;overflow-y:auto}
+.sf-week-details.active{display:block}
+.sf-entry-row{display:flex;align-items:center;padding:6px 0;border-bottom:1px solid #E8E8E8;font-size:11px}
+.sf-entry-row:last-child{border-bottom:none}
+.sf-entry-client{flex:0 0 90px;color:#616161;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sf-entry-task{flex:1;color:#12223F;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 8px}
+.sf-entry-hours{flex:0 0 50px;text-align:right;font-weight:600;color:#107c10}
 .stat-value{font-size:20px;font-weight:600;color:#12223F}
 .stat-label{font-size:10px;color:#616161;margin-top:2px;text-transform:uppercase;letter-spacing:0.5px}
 .time-entries{margin-top:12px;padding-top:12px;border-top:1px solid #E8E8E8;max-height:150px;overflow-y:auto}
@@ -326,14 +335,17 @@ SECTION_VISIBILITY_CSS_HERE
 <span style="font-size:13px;font-weight:700;color:#107c10" id="sfWeekTotal">-</span>
 </div>
 <div style="display:flex;gap:4px" id="weekDaysContainer">
-<div class="week-day-box"><div class="week-day-label">Mon</div><div class="week-day-date" id="monDate">-</div><div class="week-day-hours" id="monHours">-</div></div>
-<div class="week-day-box"><div class="week-day-label">Tue</div><div class="week-day-date" id="tueDate">-</div><div class="week-day-hours" id="tueHours">-</div></div>
-<div class="week-day-box"><div class="week-day-label">Wed</div><div class="week-day-date" id="wedDate">-</div><div class="week-day-hours" id="wedHours">-</div></div>
-<div class="week-day-box"><div class="week-day-label">Thu</div><div class="week-day-date" id="thuDate">-</div><div class="week-day-hours" id="thuHours">-</div></div>
-<div class="week-day-box"><div class="week-day-label">Fri</div><div class="week-day-date" id="friDate">-</div><div class="week-day-hours" id="friHours">-</div></div>
+<div class="week-day-box" data-day="mon"><div class="week-day-label">Mon</div><div class="week-day-date" id="monDate">-</div><div class="week-day-hours" id="monHours">-</div></div>
+<div class="week-day-box" data-day="tue"><div class="week-day-label">Tue</div><div class="week-day-date" id="tueDate">-</div><div class="week-day-hours" id="tueHours">-</div></div>
+<div class="week-day-box" data-day="wed"><div class="week-day-label">Wed</div><div class="week-day-date" id="wedDate">-</div><div class="week-day-hours" id="wedHours">-</div></div>
+<div class="week-day-box" data-day="thu"><div class="week-day-label">Thu</div><div class="week-day-date" id="thuDate">-</div><div class="week-day-hours" id="thuHours">-</div></div>
+<div class="week-day-box" data-day="fri"><div class="week-day-label">Fri</div><div class="week-day-date" id="friDate">-</div><div class="week-day-hours" id="friHours">-</div></div>
+</div>
+<div class="sf-week-details" id="sfWeekDetails">
+<div id="sfWeekEntriesContent"></div>
 </div>
 </div>
-<script id="sfWeekTimeData" type="application/json">{"totalSize":14,"done":true,"records":[{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hULN2A2"},"MPM4_BASE__ActivityDateTime__c":"2025-12-29T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.5},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hUMz2AM"},"MPM4_BASE__ActivityDateTime__c":"2025-12-30T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.5},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hUQD2A2"},"MPM4_BASE__ActivityDateTime__c":"2025-12-31T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.5},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hURp2AM"},"MPM4_BASE__ActivityDateTime__c":"2025-12-29T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.25},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hUV32AM"},"MPM4_BASE__ActivityDateTime__c":"2025-12-30T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.25},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hUYH2A2"},"MPM4_BASE__ActivityDateTime__c":"2025-12-31T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.25},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hUej2AE"},"MPM4_BASE__ActivityDateTime__c":"2025-12-29T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.25},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hVMJ2A2"},"MPM4_BASE__ActivityDateTime__c":"2025-12-30T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.5},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hVyz2AE"},"MPM4_BASE__ActivityDateTime__c":"2025-12-30T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.5},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007heiv2AA"},"MPM4_BASE__ActivityDateTime__c":"2025-12-29T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.5},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hiwD2AQ"},"MPM4_BASE__ActivityDateTime__c":"2025-12-29T00:00:00+00:00","MPM4_BASE__Hours_Input__c":1.25},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hWF72AM"},"MPM4_BASE__ActivityDateTime__c":"2025-12-30T00:00:00+00:00","MPM4_BASE__Hours_Input__c":1.0},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hV7n2AE"},"MPM4_BASE__ActivityDateTime__c":"2025-12-30T00:00:00+00:00","MPM4_BASE__Hours_Input__c":1.0},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hUEv2AM"},"MPM4_BASE__ActivityDateTime__c":"2025-12-29T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.5}]}</script>
+<script id="sfWeekTimeData" type="application/json">{"totalSize":14,"done":true,"records":[{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hULN2A2"},"MPM4_BASE__ActivityDateTime__c":"2025-12-29T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.5,"MPM4_BASE__Time__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Time__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Time__c/a1SUY000004XGuv2AG"},"MPM4_BASE__Project_Task__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Task__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Task__c/a1GUY0000013h4f2AA"},"Client_Name__c":"Baker Hill","Name":"Administration"}}},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hUMz2AM"},"MPM4_BASE__ActivityDateTime__c":"2025-12-30T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.5,"MPM4_BASE__Time__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Time__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Time__c/a1SUY000004XGwX2AW"},"MPM4_BASE__Project_Task__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Task__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Task__c/a1GUY0000013h4f2AA"},"Client_Name__c":"Baker Hill","Name":"Administration"}}},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hUQD2A2"},"MPM4_BASE__ActivityDateTime__c":"2025-12-31T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.5,"MPM4_BASE__Time__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Time__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Time__c/a1SUY000004XGy92AG"},"MPM4_BASE__Project_Task__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Task__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Task__c/a1GUY0000013h4f2AA"},"Client_Name__c":"Baker Hill","Name":"Administration"}}},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hURp2AM"},"MPM4_BASE__ActivityDateTime__c":"2025-12-29T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.25,"MPM4_BASE__Time__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Time__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Time__c/a1SUY000004XGzl2AG"},"MPM4_BASE__Project_Task__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Task__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Task__c/a1GUY0000013h4f2AA"},"Client_Name__c":"Baker Hill","Name":"Administration"}}},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hUV32AM"},"MPM4_BASE__ActivityDateTime__c":"2025-12-30T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.25,"MPM4_BASE__Time__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Time__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Time__c/a1SUY000004XGAB2A4"},"MPM4_BASE__Project_Task__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Task__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Task__c/a1GUY0000013h4f2AA"},"Client_Name__c":"Baker Hill","Name":"Administration"}}},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hUYH2A2"},"MPM4_BASE__ActivityDateTime__c":"2025-12-31T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.25,"MPM4_BASE__Time__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Time__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Time__c/a1SUY000004XH4b2AG"},"MPM4_BASE__Project_Task__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Task__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Task__c/a1GUY0000013h4f2AA"},"Client_Name__c":"Baker Hill","Name":"Administration"}}},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hUej2AE"},"MPM4_BASE__ActivityDateTime__c":"2025-12-29T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.25,"MPM4_BASE__Time__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Time__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Time__c/a1SUY000004XHB32AO"},"MPM4_BASE__Project_Task__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Task__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Task__c/a1GUY0000013h4f2AA"},"Client_Name__c":"Baker Hill","Name":"Administration"}}},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hVMJ2A2"},"MPM4_BASE__ActivityDateTime__c":"2025-12-30T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.5,"MPM4_BASE__Time__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Time__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Time__c/a1SUY000004XIYX2A4"},"MPM4_BASE__Project_Task__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Task__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Task__c/a1GUY0000013gq92AA"},"Client_Name__c":"Baker Hill","Name":"Documentation/Process Updates"}}},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hVyz2AE"},"MPM4_BASE__ActivityDateTime__c":"2025-12-30T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.5,"MPM4_BASE__Time__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Time__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Time__c/a1SUY000004XIVJ2A4"},"MPM4_BASE__Project_Task__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Task__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Task__c/a1GUY0000013gq92AA"},"Client_Name__c":"Baker Hill","Name":"Documentation/Process Updates"}}},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007heiv2AA"},"MPM4_BASE__ActivityDateTime__c":"2025-12-29T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.5,"MPM4_BASE__Time__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Time__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Time__c/a1SUY000004XOdx2AG"},"MPM4_BASE__Project_Task__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Task__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Task__c/a1GUY0000013gq92AA"},"Client_Name__c":"Baker Hill","Name":"Documentation/Process Updates"}}},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hiwD2AQ"},"MPM4_BASE__ActivityDateTime__c":"2025-12-29T00:00:00+00:00","MPM4_BASE__Hours_Input__c":1.25,"MPM4_BASE__Time__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Time__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Time__c/a1SUY000004XRTl2AO"},"MPM4_BASE__Project_Task__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Task__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Task__c/a1GUY00000147Ov2AI"},"Client_Name__c":"Baker Hill","Name":"Tier 1 Assistance"}}},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hWF72AM"},"MPM4_BASE__ActivityDateTime__c":"2025-12-30T00:00:00+00:00","MPM4_BASE__Hours_Input__c":1.0,"MPM4_BASE__Time__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Time__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Time__c/a1SUY000004XIa92AG"},"MPM4_BASE__Project_Task__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Task__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Task__c/a1GUY000000uGzk2AE"},"Client_Name__c":"Navigant Credit Union","Name":"Extended UAT- IA"}}},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hV7n2AE"},"MPM4_BASE__ActivityDateTime__c":"2025-12-30T00:00:00+00:00","MPM4_BASE__Hours_Input__c":1.0,"MPM4_BASE__Time__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Time__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Time__c/a1SUY000004XIdN2AW"},"MPM4_BASE__Project_Task__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Task__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Task__c/a1GUY000002CqPu2AK"},"Client_Name__c":"DICKINSON FINANCIAL CORP II","Name":"UAT & Prod Support - IA"}}},{"attributes":{"type":"MPM4_BASE__TH_TimeEntryLineItem__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__TH_TimeEntryLineItem__c/a1VUY000007hUEv2AM"},"MPM4_BASE__ActivityDateTime__c":"2025-12-29T00:00:00+00:00","MPM4_BASE__Hours_Input__c":0.5,"MPM4_BASE__Time__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Time__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Time__c/a1SUY000004XGmr2AG"},"MPM4_BASE__Project_Task__r":{"attributes":{"type":"MPM4_BASE__Milestone1_Task__c","url":"/services/data/v58.0/sobjects/MPM4_BASE__Milestone1_Task__c/a1GUY000001XTaY2AW"},"Client_Name__c":"Palmetto Citizens Federal Credit Union","Name":"Database Review - Configuration Analyst"}}}]}</script>
 </div>
 </div>
 </div>
@@ -1421,6 +1433,9 @@ function updateTodayStats() {
 }
 
 // Load SF time data for the week
+let sfWeekEntriesByDate = {}; // Store entries grouped by date
+let selectedSFWeekDay = null; // Currently selected day
+
 function loadSFWeekTime() {
     try {
         const dataElement = document.getElementById('sfWeekTimeData');
@@ -1444,26 +1459,40 @@ function loadSFWeekTime() {
         const weekDays = ['mon', 'tue', 'wed', 'thu', 'fri'];
         const weekDates = {};
         let weekTotal = 0;
+        sfWeekEntriesByDate = {}; // Reset entries
         
-        // Initialize dates and zero hours
+        // Initialize dates, hours, and entries arrays
         for (let i = 0; i < 5; i++) {
             const d = new Date(monday);
             d.setDate(monday.getDate() + i);
             const dateStr = d.toISOString().split('T')[0];
             const displayDate = (d.getMonth() + 1) + '/' + d.getDate();
             weekDates[dateStr] = { day: weekDays[i], display: displayDate, hours: 0 };
+            sfWeekEntriesByDate[dateStr] = [];
             document.getElementById(weekDays[i] + 'Date').textContent = displayDate;
+            // Store date on the box for click handler
+            const box = document.querySelector('.week-day-box[data-day="' + weekDays[i] + '"]');
+            if (box) box.dataset.date = dateStr;
         }
         
-        // Sum hours by date from SF data
+        // Process records - sum hours and store entries by date
         records.forEach(r => {
             const dateTime = r.MPM4_BASE__ActivityDateTime__c;
             if (!dateTime) return;
-            const entryDate = dateTime.split('T')[0]; // Extract date part from datetime
+            const entryDate = dateTime.split('T')[0];
             if (weekDates[entryDate]) {
                 const hours = parseFloat(r.MPM4_BASE__Hours_Input__c) || 0;
                 weekDates[entryDate].hours += hours;
                 weekTotal += hours;
+                
+                // Extract task info via relationship: Time Entry Line -> Time -> Project Task
+                const timeInfo = r.MPM4_BASE__Time__r || {};
+                const taskInfo = timeInfo.MPM4_BASE__Project_Task__r || {};
+                sfWeekEntriesByDate[entryDate].push({
+                    clientName: taskInfo.Client_Name__c || 'Unknown',
+                    taskName: taskInfo.Name || 'Unknown Task',
+                    hours: hours
+                });
             }
         });
         
@@ -1474,8 +1503,8 @@ function loadSFWeekTime() {
             const boxEl = hoursEl?.closest('.week-day-box');
             if (hoursEl) {
                 hoursEl.textContent = data.hours > 0 ? data.hours.toFixed(2) : '-';
-                // Highlight today
-                if (dateStr === today && boxEl) {
+                // Highlight today (but don't override selected state)
+                if (dateStr === today && boxEl && !boxEl.classList.contains('selected')) {
                     boxEl.style.background = '#e6f4ea';
                     boxEl.style.borderColor = '#107c10';
                 }
@@ -1491,10 +1520,69 @@ function loadSFWeekTime() {
         // Update week total
         document.getElementById('sfWeekTotal').textContent = weekTotal > 0 ? weekTotal.toFixed(2) + 'h' : '-';
         
+        // Add click handlers to day boxes
+        document.querySelectorAll('.week-day-box[data-day]').forEach(box => {
+            box.onclick = () => toggleSFWeekDetails(box);
+        });
+        
     } catch (e) {
         console.log('Could not load SF week time:', e);
     }
 }
+
+function toggleSFWeekDetails(box) {
+    const dateStr = box.dataset.date;
+    const detailsPanel = document.getElementById('sfWeekDetails');
+    const contentEl = document.getElementById('sfWeekEntriesContent');
+    
+    // If clicking the already selected day, close the panel
+    if (selectedSFWeekDay === dateStr) {
+        box.classList.remove('selected');
+        detailsPanel.classList.remove('active');
+        selectedSFWeekDay = null;
+        // Restore today highlight if applicable
+        const today = getLocalDateString();
+        if (dateStr === today) {
+            box.style.background = '#e6f4ea';
+            box.style.borderColor = '#107c10';
+        }
+        return;
+    }
+    
+    // Remove selected from previous
+    document.querySelectorAll('.week-day-box.selected').forEach(b => {
+        b.classList.remove('selected');
+        // Restore today highlight if it was previously selected
+        const prevDate = b.dataset.date;
+        const today = getLocalDateString();
+        if (prevDate === today) {
+            b.style.background = '#e6f4ea';
+            b.style.borderColor = '#107c10';
+        }
+    });
+    
+    // Select new day
+    box.classList.add('selected');
+    selectedSFWeekDay = dateStr;
+    
+    // Get entries for this date
+    const entries = sfWeekEntriesByDate[dateStr] || [];
+    
+    if (entries.length === 0) {
+        contentEl.innerHTML = '<div style="text-align:center;color:#8a8886;font-size:11px;padding:8px">No time entries</div>';
+    } else {
+        contentEl.innerHTML = entries.map(e => 
+            '<div class="sf-entry-row">' +
+                '<div class="sf-entry-client" title="' + (e.clientName || '').replace(/"/g, '&quot;') + '">' + (e.clientName || 'Unknown') + '</div>' +
+                '<div class="sf-entry-task" title="' + (e.taskName || '').replace(/"/g, '&quot;') + '">' + (e.taskName || 'Unknown') + '</div>' +
+                '<div class="sf-entry-hours">' + e.hours.toFixed(2) + 'h</div>' +
+            '</div>'
+        ).join('');
+    }
+    
+    detailsPanel.classList.add('active');
+}
+
 loadSFWeekTime();
 
 // =====================
