@@ -2369,6 +2369,7 @@ function startTimerFromPI() {
     
     const projectId = projectSelect.value;
     const taskId = taskSelect.value;
+    const taskName = taskSelect.options[taskSelect.selectedIndex]?.text || '';
     
     if (!projectId) {
         alert('Please select a project');
@@ -2393,9 +2394,16 @@ function startTimerFromPI() {
             sfProjectName: sfProjectName
         };
         timeData.projects.push(project);
-        saveTimeData();
-        renderProjects();
     }
+    
+    // Store the selected task for pre-filling in submit modal
+    if (taskId) {
+        project.lastSelectedTaskId = taskId;
+        project.lastSelectedTaskName = taskName;
+    }
+    
+    saveTimeData();
+    renderProjects();
     
     // Select the project in the main dropdown
     document.getElementById('projectSelect').value = project.id;
@@ -3439,11 +3447,11 @@ function renderSubmitSFContent() {
                         <!-- Linked project: task allocation -->
                         <div class="sf-allocations" data-project-id="${g.project.id}">
                             <div class="sf-allocation-row" style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
-                                <select class="project-select sf-task-select" style="flex:2">
+                                <select class="project-select sf-task-select" style="flex:2" data-last-task-id="${g.project.lastSelectedTaskId || ''}">
                                     <option value="">-- Select Task --</option>
                                     ${tasksOptions}
                                 </select>
-                                <input type="number" class="sf-hours-input" placeholder="Hrs" step="0.25" min="0.25" style="flex:0 0 70px;padding:8px;border:1px solid #E8E8E8;border-radius:4px;font-size:12px">
+                                <input type="number" class="sf-hours-input" value="${roundToQuarter(totalHours).toFixed(2)}" step="0.25" min="0.25" style="flex:0 0 70px;padding:8px;border:1px solid #E8E8E8;border-radius:4px;font-size:12px">
                                 <button type="button" class="sf-remove-row" onclick="this.parentElement.remove(); updateAllocationTotal(${g.project.id})" style="background:none;border:none;color:#d13438;cursor:pointer;font-size:16px;padding:4px 8px;opacity:0.5">×</button>
                             </div>
                         </div>
@@ -3501,6 +3509,24 @@ function renderSubmitSFContent() {
             const projectId = parseInt(group.dataset.projectId);
             updateAllocationTotal(projectId);
         });
+    });
+    
+    // Pre-select tasks that were selected when starting timer (from PI modal)
+    document.querySelectorAll('.sf-task-select[data-last-task-id]').forEach(select => {
+        const lastTaskId = select.dataset.lastTaskId;
+        if (lastTaskId) {
+            // Try to select the option
+            const option = select.querySelector(`option[value="${lastTaskId}"]`);
+            if (option) {
+                select.value = lastTaskId;
+            }
+        }
+    });
+    
+    // Update allocation totals for linked projects with pre-filled hours
+    document.querySelectorAll('.sf-submit-group[data-is-linked="true"]:not([data-has-prelinked-task="true"])').forEach(group => {
+        const projectId = parseInt(group.dataset.projectId);
+        updateAllocationTotal(projectId);
     });
 }
 
